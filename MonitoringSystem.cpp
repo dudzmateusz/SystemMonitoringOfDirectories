@@ -5,80 +5,125 @@
 #include <QDebug>
 #include <QFileSystemWatcher>
 #include <iostream>
+#include <fstream>
+#include <QDateTime>
 
-
-MonitoringSystem::FileSystemMonitoringAlghoritm::FileSystemMonitoringAlghoritm(QObject *parent, const QString dir, QFileSystemWatcher *instance) : QObject(parent)
+MonitoringSystem::FileSystemMonitoringAlghoritm::FileSystemMonitoringAlghoritm(QObject *parent, const QString path, QFileSystemWatcher &instance) : QObject(parent)
 {
-    this->dir = dir;
-    this->instance = instance;
-
+    this->path = path;
+    this->instance = &instance;
 }
-MonitoringSystem::FileSystemMonitoringAlghoritm::FileSystemMonitoringAlghoritm(QObject *parent) : QObject(parent)
-{
-    QString file_to_monitoring = "C:\\Users\\Programista3\\Desktop\\SystemFileMonitoring\\plik.txt";
-    this->instance = new QFileSystemWatcher(this);
-    if(do_files_in_directory(file_to_monitoring)==true){
-        this->instance->addPath(file_to_monitoring);
-        FileSystemMonitoringAlghoritm::connect(this->instance, SIGNAL(fileChanged(const QString &)), this, SLOT(fileHasChanged(const QString &)));
-      }
-}
-
 MonitoringSystem::FileSystemMonitoringAlghoritm::~FileSystemMonitoringAlghoritm()
 {
 }
-const QString MonitoringSystem::FileSystemMonitoringAlghoritm::showFileName()
+bool MonitoringSystem::FileSystemMonitoringAlghoritm::compareValueFromFileWithVector(int ValueFromFile, std::vector<int> ValueFromVector)
 {
-    return this->dir;
-}
-void MonitoringSystem::FileSystemMonitoringAlghoritm::displayFileName()
-{
-    std::cout<< showFileName().toStdString() << std::endl;
-}
-void MonitoringSystem::FileSystemMonitoringAlghoritm::fileHasChanged(const QString &path)
-{
-    qDebug() << "File changed" << path;
-}
-void MonitoringSystem::FileSystemMonitoringAlghoritm::directoryHasChanged(const QString & path)
-{
-    qDebug() << "Directory changed" << path;
-}
-void MonitoringSystem::FileSystemMonitoringAlghoritm::do_contains_files()
-{
-    std::cout<< this->instance->files().contains(dir);
-}
-QFileSystemWatcher MonitoringSystem::FileSystemMonitoringAlghoritm::getInstanceOfFileSystemWather()
-{
-    return this->instance;
-}
-QString MonitoringSystem::FileSystemMonitoringAlghoritm::getdirOfPath() const
-{
- return this->dir;
-}
-bool MonitoringSystem::FileSystemMonitoringAlghoritm::do_files_in_directory(QString localisatioon_of_file)
-{
-    if(QFile::exists(localisatioon_of_file)){
-        if (this->instance->files().contains(localisatioon_of_file) == true)
+    for(size_t i = 0; i < ValueFromVector.size(); i++)
+    {
+        if(ValueFromFile!=ValueFromVector.at(i))
         {
+            ValueFromVector.clear();
+            qDebug() << "Dane w pliku zmienione.";
             return true;
         }
         else
         {
             return false;
         }
+    }
+    return false;
 }
-    return true;
-}
-void MonitoringSystem::FileSystemMonitoringAlghoritm::addPathToFile()
+QString MonitoringSystem::FileSystemMonitoringAlghoritm::getPath()
 {
-    if(QFile::exists(dir)){
-        this->instance->addPath(dir);
-        if (this->instance->files().contains(dir) == true)
+    return this->path;
+}
+bool MonitoringSystem::FileSystemMonitoringAlghoritm::compareTwoUintDatas(const uint8_t& first, const uint8_t& second)
+{
+    unsigned i = 1;
+    uint8_t iteration = 0x80;
+    while(i<=sizeof(uint8_t *))
+    {
+        if((!(first & iteration)) && (second & iteration))
         {
-            qDebug("Lokalizacja istnieje, dodano sciezke.");
+            qDebug() << "Dane sie roznia. Inna wartosc bitu na pozycji: " << i ;
         }
         else
         {
-            qDebug("Blad w dodawaniu sciezki");
+            qDebug() << "Dane nie zmienione.";
+        }
+     iteration = iteration>>1;
+     ++i;
+     }
+    return true;
+}
+void MonitoringSystem::FileSystemMonitoringAlghoritm::read_file(const QString &path)
+{
+    std::ifstream file(path.toStdString());
+    std::string str;
+    int i;
+    std::vector<int> dataFromFile {0};
+    while (std::getline(file, str))
+    {
+        std::istringstream ss(str);
+        ss >> i;
+        this->compareValueFromFileWithVector(i,dataFromFile);
+    }
+}
+void MonitoringSystem::FileSystemMonitoringAlghoritm::getSavedDataInVector(std::vector<int> ValueFromVector)
+{
+    for(size_t i =0; i < ValueFromVector.size(); i++)
+    {
+        qDebug() << ValueFromVector.at(i);
+    }
+}
+const QString MonitoringSystem::FileSystemMonitoringAlghoritm::showFileName()
+{
+    return this->path;
+}
+void MonitoringSystem::FileSystemMonitoringAlghoritm::displayFileName()
+{
+    qDebug() << showFileName().data();
+}
+void MonitoringSystem::FileSystemMonitoringAlghoritm::fileHasChanged(const QString &path)
+{
+        this->read_file(path);
+}
+int MonitoringSystem::FileSystemMonitoringAlghoritm::getPathIndexPosition(const QString &path)
+{
+    if(this->instance->files().contains(path)==true)
+    {
+        int i =0;
+        while (i < getdirOfPath().count())
+        {
+            if ( getdirOfPath().at(i) == path)
+            {
+                return i;
+            }
+            i++;
+        }
+    }
+return 0;
+}
+QFileSystemWatcher MonitoringSystem::FileSystemMonitoringAlghoritm::getInstanceOfFileSystemWather()
+{
+    return this->instance;
+}
+QStringList MonitoringSystem::FileSystemMonitoringAlghoritm::getdirOfPath() const
+{
+    return this->instance->files();
+}
+void MonitoringSystem::FileSystemMonitoringAlghoritm::addPathToFile(const QString path)
+{
+    if(QFile::exists(path))
+    {
+        this->instance->addPath(path);
+        if (this->instance->files().contains(path) == true)
+        {
+            qDebug() << "Lokalizacja istnieje, dodano sciezke: " << path;
+        }
+        else
+        {
+            qDebug() << "Błąd w dodawaniu ścieżki: "<< path;
         }
     }
     else
@@ -87,9 +132,17 @@ void MonitoringSystem::FileSystemMonitoringAlghoritm::addPathToFile()
         exit(0);
     }
 }
-void MonitoringSystem::FileSystemMonitoringAlghoritm::connectSignal()
+void MonitoringSystem::FileSystemMonitoringAlghoritm::connectSignal(const QString &path)
 {
-    this->instance = new QFileSystemWatcher(this);
-    addPathToFile();
-    FileSystemMonitoringAlghoritm::connect(this->instance, SIGNAL(fileChanged(const QString &)), this, SLOT(fileHasChanged(const QString &)));
+    FileSystemMonitoringAlghoritm::connect
+                (
+                    this->instance, //instancja QFileSystemWatcher'a
+                    &QFileSystemWatcher::fileChanged, //Metoda do monitorowania pliku z QFileSystemWatcher'a
+                    this, //instancja MonitorSystem::FileSystemMonitoringAlghoritm
+                    [this, &path] // lambda wywołująca metodę z MonitorSystem::FileSystemMonitorAlghoritm
+                                  {
+                                    fileHasChanged(path);
+                                  }
+                );
 }
+

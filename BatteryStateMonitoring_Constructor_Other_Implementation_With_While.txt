@@ -1,0 +1,31 @@
+//this->addPathToFile(path);
+    //this->addPathToFile(voltage_path);
+
+    //BatteryStateFile = path;
+    //BatteryVoltageFile = voltage_path;
+
+    int i =0;
+    while(i<getdirOfPath().count())
+    {
+        std::ifstream file(getdirOfPath().at(i).toStdString());
+        std::string str;
+        uint getDataInIntFormat = 0;
+        std::string getDataInStringFormat;
+        ulong getDataInDecimalFormat;
+        while (std::getline(file, str))
+            {
+                getDataInIntFormat = std::stoi(str.data());
+            }
+                if (getdirOfPath().at(i) == BatteryStateFile)
+                {
+                    getDataInDecimalFormat = std::bitset<8>(getDataInIntFormat).to_ulong();
+                    previous_state = getDataInDecimalFormat;
+                }
+                if (getdirOfPath().at(i) == BatteryVoltageFile )
+                {
+                    actually_voltage = getDataInIntFormat;
+                }
+    connectSignal(getdirOfPath().at(i));
+    i++;
+    }
+    qDebug() << "Actually voltage in variable: " << actually_voltage;

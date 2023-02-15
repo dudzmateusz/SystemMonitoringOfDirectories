@@ -11,24 +11,26 @@ namespace MonitoringSystem{
     {
         Q_OBJECT
     private:
-        QString dir = nullptr;
+        QString path = nullptr;
         QFileSystemWatcher *instance = nullptr;
     public:
-        FileSystemMonitoringAlghoritm(QObject *parent=0, const QString dir = 0, QFileSystemWatcher *instance = 0) ;
-        FileSystemMonitoringAlghoritm(QObject *parent=0);
+        FileSystemMonitoringAlghoritm(QObject *parent, const QString path, QFileSystemWatcher &instance) ;
         ~FileSystemMonitoringAlghoritm();
         const QString showFileName();
-        void addPathToFile();
-        void connectSignal();
-        void displayFileName();
-        void do_contains_files();
-        bool do_files_in_directory(QString localisatioon_of_file);
+        virtual void addPathToFile(const QString path);
+        virtual void connectSignal(const QString &path);
+        virtual void displayFileName();
+        virtual int  getPathIndexPosition(const QString &path);
+        virtual bool compareTwoUintDatas(const uint8_t& first, const uint8_t& second);
+        virtual void read_file(const QString &path);
+        virtual void getSavedDataInVector(std::vector<int> ValueFromVector);
+        bool compareValueFromFileWithVector(int ValueFromFile, std::vector<int> ValueFromVector);
         QFileSystemWatcher getInstanceOfFileSystemWather();
-        QString getdirOfPath() const;
-    public slots:
-        void fileHasChanged(const QString &path);
-        void directoryHasChanged(const QString & path);
+        QStringList getdirOfPath() const;
+        QString getPath();
 
+    public slots:
+        virtual void fileHasChanged(const QString &path);
     };
 }
 #endif // MONITORINGSYSTEM_H
