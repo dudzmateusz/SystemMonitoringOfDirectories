@@ -9,6 +9,8 @@ CONFIG -= app_bundle
 
 SOURCES += \
         BatteryStateMonitoring.cpp \
+        DeviceWorkingTimeMonitoring.cpp \
+        LogMonitoring.cpp \
         MonitoringSystem.cpp \
         PrinterStateMonitoring.cpp \
         ReceiverSignals.cpp \
@@ -21,6 +23,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     BatteryStateMonitoring.h \
+    DeviceWorkingTimeMonitoring.h \
+    LogMonitoring.h \
     MonitoringSystem.h \
     PrinterStateMonitoring.h \
     ReceiverSignals.h

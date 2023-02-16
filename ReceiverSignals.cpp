@@ -14,7 +14,18 @@ ReceiverSignals::ReceiverSignals()
 {
 
 }
-
+void ReceiverSignals::deviceNotification_WorkingTimeHasChanged(uint message)
+{
+qDebug() << "deviceNotification_WorkingTimeHasChanged" << message;
+}
+void ReceiverSignals::printerNotification_PrinterPaperSensorTransducerValueHasChanged(uint message)
+{
+ qDebug() << "printerNotification_PrinterPaperSensorTransducerValueHasChanged" << message;
+}
+ void ReceiverSignals::printerNotification_PrinterTemperatureHasChanged(uint message)
+ {
+ qDebug() << "printerNotification_PrinterTemperatureHasChanged" << message;
+ }
 
 void ReceiverSignals::printerNotification_PrinterOvertemp(bool message)
 {
@@ -69,6 +80,11 @@ void ReceiverSignals::batteryNotification_VoltageHasChanged(uint message)
 void ReceiverSignals::batteryNotification_PercentHasChanged(uint message)
 {
     qDebug() << "batteryNotification_PercentHasChanged" << message;
+}
+
+void ReceiverSignals::logNotification_current_LogInfoHasChanged(std::string message)
+{
+    qDebug() << "logNotification_current_LogInfoHasChanged" << message.data();
 }
 
 ReceiverSignals::~ReceiverSignals()

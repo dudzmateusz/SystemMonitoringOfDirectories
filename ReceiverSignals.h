@@ -20,6 +20,8 @@ public slots:
      virtual void printerNotification_PaperAvailable(bool message);
      virtual void printerNotification_ErrorOfPrinterMotor(bool message);
      virtual void printerNotification_PrintingInProgress(bool message);
+     virtual void printerNotification_PrinterPaperSensorTransducerValueHasChanged(uint message);
+     virtual void printerNotification_PrinterTemperatureHasChanged(uint message);
 //BATTERY SLOTS
      virtual void batteryNotification_PowerConnected(bool message);
      virtual void batteryNotification_ErrorOfBattery(bool message);
@@ -29,6 +31,10 @@ public slots:
      virtual void batteryNotification_BatteryCharging(bool message);
      virtual void batteryNotification_VoltageHasChanged(uint message);
      virtual void batteryNotification_PercentHasChanged(uint message);
+//DEVICE SLOTS
+    virtual void deviceNotification_WorkingTimeHasChanged(uint message);
+//LOG SLOTS
+     virtual void logNotification_current_LogInfoHasChanged(std::string message);
 };
 
 #endif // RECEIVERSIGNALS_H
