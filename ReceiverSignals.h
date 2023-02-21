@@ -12,7 +12,6 @@ public:
     //ReceiverSignals(QObject *parent, QFileSystemWatcher& w, QString& string);
      ReceiverSignals();
     ~ReceiverSignals();
-
 public slots:
 //PRINTER SLOTS
      virtual void printerNotification_CoverClosed(bool message);

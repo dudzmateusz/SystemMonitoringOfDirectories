@@ -11,7 +11,7 @@ private:
     QString LogMonitoringFile;
     std::string current_LogInfo;
 public:
-    LogMonitoring(QObject *parent, const QString deviceInformation_path, QFileSystemWatcher &instance);
+    LogMonitoring(QObject *parent, const QString &deviceInformation_path, QFileSystemWatcher &instance);
     ~LogMonitoring();
     void read_file(const QString &path) override;
     void LogMonitoring_current_LogInfo(const QString &path);

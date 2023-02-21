@@ -31,7 +31,7 @@ private:
     uint current_temperature;
     uint current_paperSensorTransducerValueFile;
 public:
-    PrinterStateMonitoring(QObject *parent, const QString printerState_path,const QString printerPaperSensorTransducerValue_path,const QString printerTemperature_path,QFileSystemWatcher &instance);
+    PrinterStateMonitoring(QObject *parent, const QString &printerState_path,const QString &printerPaperSensorTransducerValue_path,const QString &printerTemperature_path,QFileSystemWatcher &instance);
     ~PrinterStateMonitoring();
     PrinterState GetPrinterState();
     void read_file(const QString &path) override;

@@ -14,6 +14,7 @@ SOURCES += \
         MonitoringSystem.cpp \
         PrinterStateMonitoring.cpp \
         ReceiverSignals.cpp \
+        SystemFilesMonitor.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -27,4 +28,5 @@ HEADERS += \
     LogMonitoring.h \
     MonitoringSystem.h \
     PrinterStateMonitoring.h \
-    ReceiverSignals.h
+    ReceiverSignals.h \
+    SystemFilesMonitor.h

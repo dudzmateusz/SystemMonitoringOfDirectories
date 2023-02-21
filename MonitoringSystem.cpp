@@ -139,7 +139,7 @@ void MonitoringSystem::FileSystemMonitoringAlghoritm::connectSignal(const QStrin
                     this->instance, //instancja QFileSystemWatcher'a
                     &QFileSystemWatcher::fileChanged, //Metoda do monitorowania pliku z QFileSystemWatcher'a
                     this, //instancja MonitorSystem::FileSystemMonitoringAlghoritm
-                    [this, &path] // lambda wywołująca metodę z MonitorSystem::FileSystemMonitorAlghoritm
+                    [this, path] // lambda wywołująca metodę z MonitorSystem::FileSystemMonitorAlghoritm
                                   {
                                     fileHasChanged(path);
                                   }

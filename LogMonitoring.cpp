@@ -4,17 +4,14 @@
 #include <bitset>
 #include <QDebug>
 
-
 LogMonitoring::LogMonitoring(QObject *parent,
-                             const QString deviceInformation_path,
+                             const QString &deviceInformation_path,
                              QFileSystemWatcher &instance):
 MonitoringSystem::FileSystemMonitoringAlghoritm::FileSystemMonitoringAlghoritm(parent, deviceInformation_path, instance)
 {
     LogMonitoring_current_LogInfo(deviceInformation_path);
 }
-
 LogMonitoring::~LogMonitoring(){}
-
 void LogMonitoring::read_file(const QString &path)
 {
     if(path == LogMonitoringFile)
@@ -22,7 +19,6 @@ void LogMonitoring::read_file(const QString &path)
         std::ifstream file(path.toStdString());
         std::string readDataInStringFormat = "";
         while (std::getline(file, readDataInStringFormat)){}
-
         if(current_LogInfo != readDataInStringFormat)
         {
             emit logNotification_current_LogInfoHasChanged(readDataInStringFormat);

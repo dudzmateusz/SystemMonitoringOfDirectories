@@ -28,9 +28,9 @@ namespace MonitoringSystem{
         QFileSystemWatcher getInstanceOfFileSystemWather();
         QStringList getdirOfPath() const;
         QString getPath();
-
     public slots:
         virtual void fileHasChanged(const QString &path);
     };
+
 }
 #endif // MONITORINGSYSTEM_H

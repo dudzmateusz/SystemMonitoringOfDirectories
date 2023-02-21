@@ -3,7 +3,11 @@
 #include <fstream>
 #include <bitset>
 
-PrinterStateMonitoring::PrinterStateMonitoring(QObject *parent, const QString printerState_path,const QString printerPaperSensorTransducerValue_path,const QString printerTemperature_path,QFileSystemWatcher &instance) :
+PrinterStateMonitoring::PrinterStateMonitoring(QObject *parent,
+                                               const QString &printerState_path,
+                                               const QString &printerPaperSensorTransducerValue_path,
+                                               const QString &printerTemperature_path,
+                                               QFileSystemWatcher &instance) :
    MonitoringSystem::FileSystemMonitoringAlghoritm::FileSystemMonitoringAlghoritm(parent, printerState_path, instance),
    previous_state(0)
 {
@@ -11,9 +15,7 @@ PrinterStateMonitoring::PrinterStateMonitoring(QObject *parent, const QString pr
     PrinterStateMonitoring_PrinterPaperSensorTransducerValue(printerPaperSensorTransducerValue_path);
     PrinterStateMonitoring_PrinterTemperature(printerTemperature_path);
 }
-
 PrinterStateMonitoring::~PrinterStateMonitoring(){}
-
 void PrinterStateMonitoring::PrinterStateMonitoring_PrinterState(const QString &path)
 {
     this->addPathToFile(path);
@@ -23,7 +25,7 @@ void PrinterStateMonitoring::PrinterStateMonitoring_PrinterState(const QString &
     uint getDataInIntFormat = 0;
     while (std::getline(file, str))
         {
-            getDataInIntFormat = std::stoi(str.data());
+            getDataInIntFormat = static_cast<uint>(std::stoul(str));
         }
     ulong getDataInDecimalFormat = std::bitset<8>(getDataInIntFormat).to_ulong();
     previous_state = getDataInDecimalFormat;
@@ -39,7 +41,7 @@ void PrinterStateMonitoring::PrinterStateMonitoring_PrinterPaperSensorTransducer
     uint getDataInIntFormat = 0;
     while (std::getline(file, str))
         {
-            getDataInIntFormat = std::stoi(str.data());
+            getDataInIntFormat = static_cast<uint>(std::stoul(str));
         }
     current_paperSensorTransducerValueFile = getDataInIntFormat;
     connectSignal(path);
@@ -53,7 +55,7 @@ void PrinterStateMonitoring::PrinterStateMonitoring_PrinterTemperature(const QSt
     uint getDataInIntFormat = 0;
     while (std::getline(file, str))
         {
-            getDataInIntFormat = std::stoi(str.data());
+            getDataInIntFormat = static_cast<uint>(std::stoul(str));
         }
     current_temperature = getDataInIntFormat;
     connectSignal(path);
@@ -72,7 +74,7 @@ void PrinterStateMonitoring::read_file(const QString &path)
         uint getDataInIntFormat = 0;
         while (std::getline(file, readDataInStringFormat))
         {
-            getDataInIntFormat = std::stoi(readDataInStringFormat.data());
+            getDataInIntFormat = static_cast<uint>(std::stoul(readDataInStringFormat));
         }
         ulong new_status_byte = getDataInIntFormat;
         PrinterState new_state = PrinterState(new_status_byte);
@@ -113,10 +115,11 @@ void PrinterStateMonitoring::read_file(const QString &path)
        uint getDataInIntFormat = 0;
        while (std::getline(file, readDataInStringFormat))
        {
-           getDataInIntFormat = std::stoi(readDataInStringFormat.data());
+           getDataInIntFormat = static_cast<uint>(std::stoul(readDataInStringFormat));
        }
        ulong new_value_paperSensorTransducerValueFile = getDataInIntFormat;
-       if(current_paperSensorTransducerValueFile != new_value_paperSensorTransducerValueFile){
+       if(current_paperSensorTransducerValueFile != new_value_paperSensorTransducerValueFile)
+       {
            emit printerNotification_PrinterPaperSensorTransducerValueHasChanged(new_value_paperSensorTransducerValueFile);
        }
        current_paperSensorTransducerValueFile = new_value_paperSensorTransducerValueFile;
@@ -128,10 +131,11 @@ void PrinterStateMonitoring::read_file(const QString &path)
        uint getDataInIntFormat = 0;
        while (std::getline(file, readDataInStringFormat))
        {
-           getDataInIntFormat = std::stoi(readDataInStringFormat.data());
+           getDataInIntFormat = static_cast<uint>(std::stoul(readDataInStringFormat));
        }
        ulong new_value_temperature = getDataInIntFormat;
-       if(current_temperature != new_value_temperature){
+       if(current_temperature != new_value_temperature)
+       {
            emit printerNotification_PrinterTemperatureHasChanged(new_value_temperature);
        }
        current_temperature = new_value_temperature;

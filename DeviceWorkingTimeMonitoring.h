@@ -11,7 +11,7 @@ private:
     QString DeviceWorkingTimeMonitoringFile;
     uint current_workingTime;
 public:
-    DeviceWorkingTimeMonitoring(QObject *parent, const QString deviceInformation_path, QFileSystemWatcher &instance);
+    DeviceWorkingTimeMonitoring(QObject *parent, const QString &deviceInformation_path, QFileSystemWatcher &instance);
     ~DeviceWorkingTimeMonitoring();
     void read_file(const QString &path) override;
     void DeviceWorkingTimeMonitoring_current_workingTime(const QString &path);
@@ -19,6 +19,7 @@ public:
     QString getDeviceWorkingTimeMonitoringFile();
 signals:
     void deviceNotification_WorkingTimeHasChanged(uint message);
+
 
 };
 

@@ -34,7 +34,7 @@ private:
     uint current_voltage;
     uint current_percent_of_battery;
 public:
-    BatteryStateMonitoring(QObject *parent, const QString batteryState_path, const QString batteryVoltage_path,const QString batteryPercent_path, QFileSystemWatcher &instance);
+    BatteryStateMonitoring(QObject *parent, const QString &batteryState_path, const QString &batteryVoltage_path,const QString &batteryPercent_path, QFileSystemWatcher &instance);
     ~BatteryStateMonitoring();
     BatteryState GetPrinterState();
     void read_file(const QString &path) override;
@@ -48,9 +48,9 @@ signals:
     void batteryNotification_PowerConnected(bool message);
     void batteryNotification_ErrorOfBattery(bool message);
     void batteryNotification_BatteryFull(bool message);
-    //void batteryNotification_BatteryDischarging(bool message);
-    //void batteryNotification_BatteryDead(bool message);
-    //void batteryNotification_BatteryCharging(bool message);
+    void batteryNotification_BatteryDischarging(bool message);
+    void batteryNotification_BatteryDead(bool message);
+    void batteryNotification_BatteryCharging(bool message);
     void batteryNotification_VoltageHasChanged(uint message);
     void batteryNotification_PercentHasChanged(uint message);
 
